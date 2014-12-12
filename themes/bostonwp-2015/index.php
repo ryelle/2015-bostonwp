@@ -1,1 +1,0 @@
-<h1>Theme Test</h1>
