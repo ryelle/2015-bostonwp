@@ -20,11 +20,16 @@ If you don't already have git set up, download the GitHub app: [Windows](https:/
 
 Set up a local install of WordPress, using whatever method works for you. I prefer [Vagrant](https://github.com/Varying-Vagrant-Vagrants/VVV/), but you can use [MAMP](http://www.mamp.info/en/), [XAMPP](https://www.apachefriends.org/index.html), or even [Desktop Server](http://serverpress.com/products/desktopserver/).
 
+This repository will replace `wp-content`, but we already have `wp-content` from installing WordPress, so we need to move some things around.
+
 Rename your `wp-content` folder to anything, we're going to end up deleting it later.
 
 Fork this repo so you can work on it under your own account: [Using the app](https://guides.github.com/activities/forking/), or [using command line](https://help.github.com/articles/fork-a-repo/).
 
 Clone your new repo into the root WP directory, and rename it to `wp-content`
+
+![](https://cldup.com/Aj4v1jf-vV.png)
+> Our folder structure should look like this now.
 
 Move the default themes back into the new `wp-content` (at least one, so we can use the site while the new theme is being developed), and delete the now-renamed original.
 
@@ -47,6 +52,9 @@ __Don't be afraid to ask questions! your team is your first resource, but the or
 
 ### Other Resources
 
-- [Another git app, not github-specific, for Mac](http://rowanj.github.io/gitx/)
-- [_s starter theme](http://underscores.me/)
-
+- [Another git app](http://rowanj.github.io/gitx/), not github-specific, for Mac.
+- [_s (underscores)](http://underscores.me/), a good head-start on theme building
+- [Plugin Handbook](https://developer.wordpress.org/plugins/)
+- [Code Reference (new!)](https://developer.wordpress.org/reference/), developer-focused documentation
+- [Codex](http://codex.wordpress.org/) for a lot of WP information, both user and developer
+- [WP Seek](http://wpseek.com/) to search WP source code
