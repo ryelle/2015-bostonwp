@@ -7,6 +7,7 @@
  * @since   2013-08-14
  */
 class BWP_Speaker_Submit {
+	private $configuration;
 
 	/**
 	 * The Constructor.  Hooks init
@@ -73,8 +74,12 @@ class BWP_Speaker_Submit {
 		//		);
 
 
-		$json       = file_get_contents( plugin_dir_path( __FILE__ ) . 'fields.json' );
-		$validators = json_decode( $json );
+		if ( empty( $this->configuration ) ) {
+			$json                = file_get_contents( plugin_dir_path( __FILE__ ) . 'fields.json' );
+			$this->configuration = json_decode( $json );
+		}
+
+		$validators = $this->configuration->fields;
 
 
 		// Contains the cleaned submission data.  Only includes fields specified in $validators
@@ -82,8 +87,18 @@ class BWP_Speaker_Submit {
 
 		foreach ( $validators as $name => $validator ) {
 			if ( isset( $submission[$name] ) ) {
+
+				if ( isset( $validator['max_length'] ) && strlen( $submission[$name] ) >= $validator['max_length'] ) {
+					return new WP_Error( 400, __( 'The ' . $validator['friendly_name'] . ' field must be less than ' . $validator['max_length'] . ' characters.', 'bwp_speaker' )
+				}
+
+				if ( isset( $validator['min_length'] ) && strlen( $submission[$name] ) <= $validator['min_length'] ) {
+					return new WP_Error( 400, __( 'The ' . $validator['friendly_name'] . ' field must be greater than ' . $validator['max_length'] . ' characters.', 'bwp_speaker' )
+				}
+
 				$clean[$name] = call_user_func( $validator['sanitize'], $submission[$name] );
-			} elseif ( $validator['required'] ) { // The field wasn't set, let's see if it is required
+
+			} elseif ( isset( $validator['required'] ) && $validator['required'] ) { // The field wasn't set, let's see if it is required
 				return new WP_Error( 400, __( 'Please complete the ' . $validator['friendly_name'] . ' field', 'bwp_speaker' ) );
 			}
 		}
@@ -112,7 +127,7 @@ class BWP_Speaker_Submit {
 			'post_type'    => $this->get_post_type(),
 			'post_author'  => $this->get_submission_owner(), // The user ID number of the author. Default is the current user ID.
 			'ping_status'  => 'closed', // Pingbacks or trackbacks allowed. Default is the option 'default_ping_status'
-			'tax_input'    => [ array( $this->get_subject_taxonomy() => $submission['bwp_speaker_subjects'] ) ] // For custom taxonomies. Default empty.
+			'tax_input'    => [ array( $this->get_subject_taxonomy() => $submission['bwp_speaker_subject'] ) ] // For custom taxonomies. Default empty.
 		);
 
 		$result = wp_insert_post( $post );
@@ -125,13 +140,13 @@ class BWP_Speaker_Submit {
 
 			$meta = $submission;
 			unset( $meta['bwp_speaker_pitch'] );
-			unset( $meta['bwp_speaker_subjects'] );
 
 			foreach ( $meta as $key => $value ) {
 				add_post_meta( $post_id, $key, $value );
 			}
 		}
 
+		unset( $meta['bwp_speaker_subject'] );
 
 	}
 
