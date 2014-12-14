@@ -23,7 +23,23 @@
 
 	<header id="masthead" class="site-header" role="banner">
 		<div class="site-branding">
-			<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+                        <?php
+                        $logo = get_field('logo', 'option');
+                        if ($logo  != '') : ?>
+                            <div class="logo">
+                                <a href="<? the_permalink(); ?>"><img src="<?php echo $logo; ?>" alt="<?php echo get_bloginfo( 'name'); ?>" /></a></div>
+                        <?php endif; ?>
+
+                    <h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+                        
+                        <?php
+                        $headerimg = get_field('header_image', 'option');
+                        if ($headerimg  != '') : ?>
+                            <div class="header-img">
+                                <img src="<?php echo $headerimg; ?>" alt="<?php echo get_bloginfo( 'name'); ?>" />
+                            </div>
+                        <?php endif; ?>
+            
 			<h2 class="site-description"><?php bloginfo( 'description' ); ?></h2>
 		</div><!-- .site-branding -->
 

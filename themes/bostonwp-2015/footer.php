@@ -11,11 +11,15 @@
 	</div><!-- #content -->
 
 	<footer id="colophon" class="site-footer" role="contentinfo">
-		<div class="site-info">
-			<a href="<?php echo esc_url( __( 'http://wordpress.org/', 'bostonwp' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'bostonwp' ), 'WordPress' ); ?></a>
-			<span class="sep"> | </span>
-			<?php printf( __( 'Theme: %1$s by %2$s.', 'bostonwp' ), 'bostonwp', '<a href="http://underscores.me/" rel="designer">Underscores.me</a>' ); ?>
-		</div><!-- .site-info -->
+            <?php if ( is_active_sidebar( 'site-footer' ) ) : ?>
+            <div id="home-footer" class="content-area" role="complementary">
+                    <?php dynamic_sidebar( 'site-footer' ); ?>
+            </div><!-- #site-footer -->
+            <?php endif; ?>
+            
+            <div class="site-info content-area">
+                &copy; <?php echo date('Y') . ' ' . get_bloginfo( 'name'); ?> 
+            </div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->
 
