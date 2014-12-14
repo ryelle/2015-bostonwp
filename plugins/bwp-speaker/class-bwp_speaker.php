@@ -68,12 +68,13 @@ class BWP_Speaker {
 		//			'bwp_speaker_first_name' => array(
 		//				'required'      => true,
 		//				'sanitize'      => 'sanitize_text_field',
-		//				'friendly_name' => 'First Name'
+		//				'Friendly' => 'First Name'
 		//			)
 		//		);
 
 
-		$validators = json_decode( file_get_contents( plugin_dir_path( __FILE__ ) . 'fields.json' ) );
+		$json       = file_get_contents( plugin_dir_path( __FILE__ ) . 'fields.json' );
+		$validators = json_decode( $json );
 
 
 		// Contains the cleaned submission data.  Only includes fields specified in $validators
@@ -81,15 +82,16 @@ class BWP_Speaker {
 
 		foreach ( $validators as $name => $validator ) {
 			if ( isset( $submission[$name] ) ) {
-
 				$clean[$name] = call_user_func( $validator['sanitize'], $submission[$name] );
-
 			} elseif ( $validator['required'] ) { // The field wasn't set, let's see if it is required
 				return new WP_Error( 400, __( 'Please complete the ' . $validator['friendly_name'] . ' field', 'bwp_speaker' ) );
 			}
 		}
 
 		return $clean;
+
+		// no default values. using these as examples
+
 
 	}
 
@@ -132,7 +134,6 @@ class BWP_Speaker {
 
 
 	}
-
 
 }
 

@@ -1,0 +1,52 @@
+{
+  "f_firstname" : {
+    "required" : true,
+    "sanitize" : "sanitize_text_field",
+    "friendly" : "First Name",
+  },
+  "f_lastname" : {
+    "required" : true,
+    "sanitize" : "sanitize_text_field",
+    "friendly" : "Last Name",
+  },
+  "f_email" : {
+    "required" : true,
+    "sanitize" : "sanitize_email",
+    "friendly" : "Email",
+  },
+  "f_url" : {
+    "required" : false,
+    "sanitize" : "sanitize_text_field",
+    "friendly" : "URL",
+  },
+  "f_twitter" : {
+    "required" : false,
+    "sanitize" : "sanitize_text_field",
+    "friendly" : "Twitter",
+  },
+  "f_title" : {
+    "required" : true,
+    "sanitize" : "sanitize_text_field",
+    "friendly" : "Title",
+  },
+  "f_description" : {
+    "required" : true,
+    "sanitize" : "wp_kses",
+    "friendly" : "f_description",
+  },
+  "f_subject" : {
+    "required" : true,
+    "sanitize" : "sanitize_text_field",
+    "friendly" : "Subject",
+  },
+   "f_audience" : {
+    "required" : true,
+    "sanitize" : "sanitize_text_field",
+    "friendly" : "Audience",
+  },
+   "f_desired_date" : {
+    "required" : true,
+    "sanitize" : "sanitize_text_field",
+    "friendly" : "Desired Date",
+  },
+}
