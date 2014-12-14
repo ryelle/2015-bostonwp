@@ -6,7 +6,7 @@
  * @author  Eddie Hurtig <hurtige@sudbury.ma.us>
  * @since   2013-08-14
  */
-class BWP_Speaker {
+class BWP_Speaker_Submit {
 
 	/**
 	 * The Constructor.  Hooks init
@@ -138,4 +138,4 @@ class BWP_Speaker {
 }
 
 
-$bwp_speaker = new BWP_Speaker();
+$bwp_speaker = new BWP_Speaker_Submit();
