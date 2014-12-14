@@ -3,7 +3,6 @@
 /**
  * Responsible for saving speaker submissions to the database from the front end of the site
  *
- * @author  Eddie Hurtig <hurtige@sudbury.ma.us>
  * @since   2013-08-14
  */
 class BWP_Speaker_Submit {

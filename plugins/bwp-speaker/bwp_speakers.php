@@ -13,6 +13,9 @@ include_once( 'class-bwp_speaker_submit.php' );
 
 class BWP_speaker {
 
+	/**
+	 * Constructor
+	 */
 	function __construct() {
 
 		add_action( 'init', array( $this, 'bwp_create_speaker' ) );
@@ -21,6 +24,9 @@ class BWP_speaker {
 
 	}
 
+	/**
+	 * registers the Custom Post Type for Speakers
+	 */
 	function bwp_create_speaker() {
 		register_post_type( 'bwp-speaker',
 			array(
@@ -44,6 +50,9 @@ class BWP_speaker {
 		);
 	}
 
+	/**
+	 * Initializes
+	 */
 	function bwp_speaker_subject_init() {
 		// create a new taxonomy
 		register_taxonomy(
@@ -57,47 +66,100 @@ class BWP_speaker {
 		);
 	}
 
+	/**
+	 * Renders the Form for Speaker submissions
+	 */
 	function bwp_speaker_form_shortcode() {
+		ob_start();
+		?>
 
-		$form = "";
+		<form method='get' id='bwp_speakerfrm' action=' #'>
+			<div><label> First Name *</label></div>
+			<div><input name='bwp_firstname' id='bwp_firstname' type='text' /></div>
+			<div><label> Last Name *</label></div>
+			<div><input name='bwp_lastname' id='bwp_lastname' type='text' /></div>
+			<div><label for='bwp_email'> Email *</label></div>
+			<div><input name='bwp_email' id='bwp_email' type='email' /></div>
+			<div><label for='bwp_url'> Website</label></div>
+			<div><input name='bwp_url' id='bwp_url' type='url' /></div>
+			<div><label for='bwp_twitter'> Twitter</label></div>
+			<div><input name='bwp_twitter' id='bwp_twitter' type='text' /></div>
+			<div><label for='bwp_title'> Talk Title < span class='gfield_required' >*</label></div>
+			<div><input name='bwp_title' id='bwp_title' type='text' /></div>
+			<div>
+				<label for='bwp_description'> Description *: </label>
+				Some details of your talk, including format & amp; length
+			</div>
+			<div></div>
+			<div><textarea name='bwp_description' id='bwp_description' rows='10' cols='50'></textarea></div>
+			<div><label for='bwp_subject'> Subject *</label></div>
+			<div><select name="bwp_subject">
+					<option selected="selected"> Select ...</option>
+					<?php    $current_subjects = $this->bwp_get_subjects();
+					if ( count( $current_subjects ) > 0 ) {
+						foreach ( $current_subjects as $one_subject ) {
+							echo '<option value="' . esc_attr( $one_subject->term_id ) . '">' . esc_html( $one_subject->name ) . '</option>';
+						} // end of foreach
+					} // end of IF
+					?>
 
-		$form .= "<form method='get' id='bwp_speakerfrm'  action='#'>";
-		$form .= "<label>First Name*</label>";
-		$form .= "<input name='f_firstname' id='f_firstname' type='text' />";
-		$form .= "<label>Last Name*</label>";
-		$form .= "<input name='f_lastname' id='f_lastname' type='text' />";
-		$form .= "<label  for='f_email'>Email*</label>";
-		$form .= "<input name='f_email' id='f_email' type='email'  />";
-		$form .= "<label  for='f_url'>Website</label>";
-		$form .= "<input name='f_url' id='f_url' type='url'  />";
-		$form .= "<label  for='f_twitter'>Twitter</label>";
-		$form .= "<input name='f_twitter' id='f_twitter' type='text' />";
-		$form .= "<label  for='f_title'>Talk Title<span class='gfield_required'>*</label>";
-		$form .= "<input name='f_title' id='f_title' type='text' />";
-		$form .= "<label  for='f_description'>Description*</label>";
-		$form .= "<p>ncluding format & length.</p>";
-		$form .= "<textarea name='f_description' id='f_description' rows='10' cols='50'></textarea>";
-		$form .= "<label  for='f_subject'>Subject*</label>";
-		$form .= "<select name='f_subject'>";
-		$form .= "<option>WordPress Security</option>";
-		$form .= "<option>WordPress SEO</option>";
-		$form .= "<option>Beginner WordPress</option>";
-		$form .= "<option>Advanced WordPress</option>";
-		$form .= "<option selected='selected'>Select...</option>";
-		$form .= "</select>";
-		$form .= "<label  for='f_audience'>Audience: Who is this talk targeted at?</label>";
-		$form .= "<input name='f_audience' id='f_audience' type='text'  />";
-		$form .= "<label  for='f_desired_date'>Date*</label>";
-		$form .= "<p>Our meetups are (usually) the last Monday of the month. What month are you looking to speak at?";
-		$form .= "<input name='f_desired_date' id='f_desired_date' type='text'  /></p>";
-		$form .= "<label  for='f_comments'>Comments</label>";
-		$form .= "<input name='f_comments' id='f_comments' type='text' value='' autocomplete='off' />";
-		$form .= "<p>This field is for validation purposes and should be left unchanged. </p>";
-		$form .= "<input type='submit' id='f_submit' value='Submit' />";
-		$form .= "</form>";
+				</select>
+			</div>
+			<div><label for='bwp_audience'>Audience: Who is this talk targeted at?</label></div>
+			<div><input name='bwp_audience' id='bwp_audience' type='text' /></div>
+			<div><label for='bwp_desired_date'>Date*</label>
+				: Our meetups are (usually) the last Monday of the month. What month are you looking to speak at?
+			</div>
+			<div><input name='bwp_desired_date' id='bwp_desired_date' type='text' /></div>
+			<div><input type='submit' id='bwp_submit' value='Submit' /></div>
+		</form>
 
-		return $form;
+		<style type="text/css">
+			/* KMC */
+			#bwp_speakerfrm div {
+				clear: both;
+				display: block;
+				float: left;
+			}
 
+			#bwp_speakerfrm input, #bwp_speakerfrm select {
+				float: right;
+				margin-bottom: 20px;
+			}
+
+		</style>
+
+
+		<?php
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Gets a list of Subject Terms for use in the guest submission form
+	 * @return array
+	 */
+	function bwp_get_subjects() {
+
+		$taxonomies = array(
+			'subject',
+		);
+
+		$args = array(
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+			'hide_empty' => false,
+		);
+
+
+		$subjects = get_terms( $taxonomies, $args );
+
+
+		if ( empty ( $subjects ) || is_wp_error( $subjects ) ) {
+			return array();
+		}
+
+		return $subjects;
 	}
 
 }
