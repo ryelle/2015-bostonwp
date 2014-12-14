@@ -9,7 +9,7 @@
  * Set the content width based on the theme's design and stylesheet.
  */
 if ( ! isset( $content_width ) ) {
-	$content_width = 640; /* pixels */
+	$content_width = 1000; /* pixels */
 }
 
 if ( ! function_exists( 'bostonwp_setup' ) ) :
@@ -85,14 +85,42 @@ add_action( 'after_setup_theme', 'bostonwp_setup' );
  */
 function bostonwp_widgets_init() {
 	register_sidebar( array(
-		'name'          => __( 'Sidebar', 'bostonwp' ),
-		'id'            => 'sidebar-1',
-		'description'   => '',
+		'name'          => __( 'Primary Sidebar', 'bostonwp' ),
+		'id'            => 'primary-sidebar',
+		'description'   => 'Default sidebar for interior pages',
 		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</aside>',
 		'before_title'  => '<h1 class="widget-title">',
 		'after_title'   => '</h1>',
 	) );
+	register_sidebar( array(
+		'name'          => __( 'Home Top', 'bostonwp' ),
+		'id'            => 'home-top',
+		'description'   => 'Appears below logoand header image',
+		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h1 class="widget-title">',
+		'after_title'   => '</h1>',
+	) );        
+	register_sidebar( array(
+		'name'          => __( 'Home Footer', 'bostonwp' ),
+		'id'            => 'home-footer',
+		'description'   => 'Appears above Site Footer',
+		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h1 class="widget-title">',
+		'after_title'   => '</h1>',
+	) );        
+	register_sidebar( array(
+		'name'          => __( 'Site Footer', 'bostonwp' ),
+		'id'            => 'site-footer',
+		'description'   => 'Footer for site, appears on all pages. Widgets will appear up to 3 across.',
+		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h1 class="widget-title">',
+		'after_title'   => '</h1>',
+	) );        
+        
 }
 add_action( 'widgets_init', 'bostonwp_widgets_init' );
 
@@ -136,3 +164,13 @@ require get_template_directory() . '/inc/customizer.php';
  * Load Jetpack compatibility file.
  */
 require get_template_directory() . '/inc/jetpack.php';
+
+/**
+ * Load Shortcodes compatibility file.
+ */
+require get_template_directory() . '/inc/shortcodes.php';
+
+/**
+ * Load Shortcodes compatibility file.
+ */
+require get_template_directory() . '/inc/custom-functions.php';
