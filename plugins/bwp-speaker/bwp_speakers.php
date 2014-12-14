@@ -9,6 +9,16 @@
  */
 
 
+if ( ! defined( 'BWP_SPEAKER_POST_TYPE' ) ) {
+	define( 'BWP_SPEAKER_POST_TYPE', 'bwp-speaker' );
+}
+
+
+if ( ! defined( 'BWP_SPEAKER_SUBMISSION_OWNER' ) ) {
+	define( 'BWP_SPEAKER_SUBMISSION_OWNER', 'speakersubmissions' );
+}
+
+
 include_once( 'class-bwp_speaker_submit.php' );
 
 class BWP_speaker {
@@ -22,13 +32,27 @@ class BWP_speaker {
 		add_action( 'init', array( $this, 'bwp_speaker_subject_init' ) );
 		add_shortcode( 'bwp_speaker_form', array( $this, 'bwp_speaker_form_shortcode' ) );
 
+		add_action( 'wp_enqueue_scripts', array( &$this, 'enqueue_scripts' ) );
+
+	}
+
+	/**
+	 * Enqueue jQuery if the current Post has our shortcode
+	 */
+	function enqueue_scripts() {
+		if ( has_shortcode( get_post()->post_content, 'bwp_speaker_form' ) ) {
+			wp_enqueue_script( 'jquery' );
+			wp_register_script( 'bwp_script', plugins_url( 'js/script.js', __FILE__ ), array( 'jquery' ) );
+			wp_enqueue_script( "bwp_script" );
+
+		}
 	}
 
 	/**
 	 * registers the Custom Post Type for Speakers
 	 */
 	function bwp_create_speaker() {
-		register_post_type( 'bwp-speaker',
+		register_post_type( BWP_SPEAKER_POST_TYPE,
 			array(
 				'labels'      => array(
 					'name'               => __( 'Speakers' ),
@@ -66,34 +90,41 @@ class BWP_speaker {
 		);
 	}
 
+
 	/**
 	 * Renders the Form for Speaker submissions
 	 */
 	function bwp_speaker_form_shortcode() {
+
 		ob_start();
 		?>
 
-		<form method='get' id='bwp_speakerfrm' action=' #'>
+		<form method='get' id='bwp_speakerfrm' action='#'>
+			<input type="hidden" id="bwp_speaker_admin_url" value="<?php echo admin_url( 'admin-ajax.php?action=bwp_speaker_save' ); ?>">
+			<?php wp_nonce_field( 'bwp_speaker_guest_nonce', 'bwp_speaker_guest_submission' ); ?>
+			<input type="hidden" name="action" value="bwp_speaker_save">
+
 			<div><label> First Name *</label></div>
-			<div><input name='bwp_firstname' id='bwp_firstname' type='text' /></div>
+			<div><input name="bwp_speaker_firstname" id="bwp_speaker_firstname" type="text" /></div>
 			<div><label> Last Name *</label></div>
-			<div><input name='bwp_lastname' id='bwp_lastname' type='text' /></div>
-			<div><label for='bwp_email'> Email *</label></div>
-			<div><input name='bwp_email' id='bwp_email' type='email' /></div>
-			<div><label for='bwp_url'> Website</label></div>
-			<div><input name='bwp_url' id='bwp_url' type='url' /></div>
-			<div><label for='bwp_twitter'> Twitter</label></div>
-			<div><input name='bwp_twitter' id='bwp_twitter' type='text' /></div>
-			<div><label for='bwp_title'> Talk Title < span class='gfield_required' >*</label></div>
-			<div><input name='bwp_title' id='bwp_title' type='text' /></div>
+			<div><input name="bwp_speaker_lastname" id="bwp_speaker_lastname" type="text" /></div>
+			<div><label for="bwp_speaker_email"> Email *</label></div>
+			<div><input name="bwp_speaker_email" id="bwp_speaker_email" type="email" /></div>
+			<div><label for="bwp_speaker_url"> Website</label></div>
+			<div><input name="bwp_speaker_url" id="bwp_speaker_url" type="url" value="http://" /></div>
+			<div><label for="bwp_speaker_twitter"> Twitter</label></div>
+			<div><input name="bwp_speaker_twitter" id="bwp_speaker_twitter" type="text" /></div>
+			<div><label for="bwp_speaker_title"> Talk Title *</label></div>
+			<div><input name="bwp_speaker_title" id="bwp_speaker_title" type="text" /></div>
 			<div>
-				<label for='bwp_description'> Description *: </label>
-				Some details of your talk, including format & amp; length
+				<label for="bwp_speaker_description"> Description *: </label><br>
+				<small>Some details of your talk, including format &amp; length</small>
 			</div>
 			<div></div>
-			<div><textarea name='bwp_description' id='bwp_description' rows='10' cols='50'></textarea></div>
-			<div><label for='bwp_subject'> Subject *</label></div>
-			<div><select name="bwp_subject">
+			<div><textarea name="bwp_speaker_description" id="bwp_speaker_description" rows="10" cols="50"></textarea>
+			</div>
+			<div><label for="bwp_speaker_subject"> Subject *</label></div>
+			<div><select name="bwp_speaker_subject">
 					<option selected="selected"> Select ...</option>
 					<?php    $current_subjects = $this->bwp_get_subjects();
 					if ( count( $current_subjects ) > 0 ) {
@@ -105,13 +136,25 @@ class BWP_speaker {
 
 				</select>
 			</div>
-			<div><label for='bwp_audience'>Audience: Who is this talk targeted at?</label></div>
-			<div><input name='bwp_audience' id='bwp_audience' type='text' /></div>
-			<div><label for='bwp_desired_date'>Date*</label>
-				: Our meetups are (usually) the last Monday of the month. What month are you looking to speak at?
+			<div><label for="bwp_speaker_audience">Audience:</label>
+				<small>Who is this talk targeted at?</small>
 			</div>
-			<div><input name='bwp_desired_date' id='bwp_desired_date' type='text' /></div>
-			<div><input type='submit' id='bwp_submit' value='Submit' /></div>
+			<div><input name="bwp_speaker_audience" id="bwp_speaker_audience" type="text" /></div>
+			<div><label for="bwp_speaker_desired_date">Date *</label><br>
+				<small>Our meetups are (usually) the last Monday of the month. What month are you looking to speak at?</small>
+			</div>
+			<div><input name="bwp_speaker_desired_date" id="bwp_speaker_desired_date" type="text" /></div>
+
+			<div><label for="bwp_speaker_honeypot">What is two plus four *</label>
+
+			</div>
+			<div><input name="bwp_speaker_honeypot" value=""></div>
+
+			<div><input type="submit" id="bwp_speaker_submit" value="Submit" /></div>
+
+			<div id="bwp_speaker_notices" class="alert" style="display: none;">
+
+			</div>
 		</form>
 
 		<style type="text/css">
@@ -165,3 +208,5 @@ class BWP_speaker {
 }
 
 $bwp_speaker = new BWP_Speaker();
+
+
