@@ -21,7 +21,7 @@ class BWP_Speaker_Submit {
 	 */
 	function init() {
 		add_action( 'admin_ajax_bwp_speaker_save', array( &$this, 'submission' ) );
-		add_action( 'admin_ajax_noprive_bwp_speaker_save', array( &$this, 'submission' ) );
+		add_action( 'admin_ajax_nopriv_bwp_speaker_save', array( &$this, 'submission' ) );
 	}
 
 	/**
@@ -89,11 +89,11 @@ class BWP_Speaker_Submit {
 			if ( isset( $submission[$name] ) ) {
 
 				if ( isset( $validator['max_length'] ) && strlen( $submission[$name] ) >= $validator['max_length'] ) {
-					return new WP_Error( 400, __( 'The ' . $validator['friendly_name'] . ' field must be less than ' . $validator['max_length'] . ' characters.', 'bwp_speaker' )
+					return new WP_Error( 400, __( 'The ' . $validator['friendly_name'] . ' field must be less than ' . $validator['max_length'] . ' characters.', 'bwp_speaker' ) );
 				}
 
 				if ( isset( $validator['min_length'] ) && strlen( $submission[$name] ) <= $validator['min_length'] ) {
-					return new WP_Error( 400, __( 'The ' . $validator['friendly_name'] . ' field must be greater than ' . $validator['max_length'] . ' characters.', 'bwp_speaker' )
+					return new WP_Error( 400, __( 'The ' . $validator['friendly_name'] . ' field must be greater than ' . $validator['max_length'] . ' characters.', 'bwp_speaker' ) );
 				}
 
 				$clean[$name] = call_user_func( $validator['sanitize'], $submission[$name] );
