@@ -168,9 +168,4 @@ require get_template_directory() . '/inc/jetpack.php';
 /**
  * Load Shortcodes compatibility file.
  */
-require get_template_directory() . '/inc/shortcodes.php';
-
-/**
- * Load Shortcodes compatibility file.
- */
 require get_template_directory() . '/inc/custom-functions.php';
