@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 		sass: {
 			dev: {
 				options: {
-					style: 'expanded',
+					style: 'nested',
 					noCache: false,
 					sourcemap: false
 				},
