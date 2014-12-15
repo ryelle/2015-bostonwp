@@ -13,3 +13,6 @@
 /themes/twenty*
 
 /uploads
+
+node_modules
+.sass-cache
