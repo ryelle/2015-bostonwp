@@ -1,0 +1,92 @@
+{
+	"mappings": {
+		"post_title"  : "bwp_speaker_title",
+		"post_content": "bwp_speaker_description",
+		"tax_input"   : {
+			"subject": [
+				"{bwp_speaker_subject}"
+			]
+		}
+	},
+	"fields"  : {
+		"bwp_speaker_firstname"   : {
+			"required"  : true,
+			"sanitize"  : "sanitize_text_field",
+			"friendly"  : "First Name",
+			"min_length": 1,
+			"max_length": 50
+		},
+		"bwp_speaker_lastname"    : {
+			"required"  : true,
+			"sanitize"  : "sanitize_text_field",
+			"friendly"  : "Last Name",
+			"min_length": 1,
+			"max_length": 50
+		},
+		"bwp_speaker_email"       : {
+			"required"  : true,
+			"sanitize"  : "sanitize_email",
+			"friendly"  : "Email",
+			"min_length": 5,
+			"max_length": 255
+		},
+		"bwp_speaker_url"         : {
+			"required"  : false,
+			"sanitize"  : "sanitize_text_field",
+			"friendly"  : "URL",
+			"min_length": 4,
+			"max_length": 1024
+		},
+		"bwp_speaker_twitter"     : {
+			"required"  : false,
+			"sanitize"  : "sanitize_text_field",
+			"friendly"  : "Twitter Handle",
+			"min_length": 1,
+			"max_length": 50
+		},
+		"bwp_speaker_title"       : {
+			"required"  : true,
+			"sanitize"  : "sanitize_text_field",
+			"friendly"  : "Title",
+			"min_length": 1,
+			"max_length": 255
+		},
+		"bwp_speaker_description" : {
+			"required"  : true,
+			"sanitize"  : "wp_kses_post",
+			"friendly"  : "Talk Description",
+			"min_length": 30,
+			"max_length": 1024
+		},
+		"bwp_speaker_subject"     : {
+			"required": true,
+			"sanitize": "sanitize_text_field",
+			"friendly": "Subject"
+		},
+		"bwp_speaker_audience"    : {
+			"required"  : true,
+			"sanitize"  : "sanitize_text_field",
+			"friendly"  : "Audience",
+			"min_length": 5,
+			"max_length": 50
+		},
+		"bwp_speaker_desired_date": {
+			"required"  : true,
+			"sanitize"  : "sanitize_text_field",
+			"friendly"  : "Desired Date",
+			"min_length": 1,
+			"max_length": 255
+		},
+		"bwp_speaker_honeypot"    : {
+			"required"  : true,
+			"sanitize"  : "sanitize_text_field",
+			"friendly"  : "Spam Checker",
+			"min_length": 0,
+			"max_length": 255,
+			"values"    : [
+				"6",
+				"six"
+			]
+		}
+	}
+}
