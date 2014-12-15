@@ -3,6 +3,9 @@
 /plugins/index.php
 /plugins/akismet
 /plugins/hello.php
+/plugins/advanced-custom-fields
+/plugins/acf-options-page
+/plugins/meetup-widgets
 
 /themes/index.php
 /themes/twenty*
